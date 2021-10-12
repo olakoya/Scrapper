@@ -12,6 +12,7 @@ HEADERS = ({'User-Agent':
 
 # search_query = input("please enter an item: ") 
 def scrapper(search_query):
+    
     for i in range(1,8):
 
         URL = f"https://www.amazon.com/s?k={search_query}&page={i}"
@@ -20,13 +21,18 @@ def scrapper(search_query):
 
         soup = bs(response, 'html.parser')
         
-        products = soup.find_all('div',{'data-component-type':'s-search-result'})
+        products = soup.find_all('span',{'class':'a-size-base-plus'})
+        # print(products.text)
 
         for product in products:
             print(product.text)
+        
+        if product.text is None:
+            break
        
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('search', help='enter a search item', type=str)
     args = parser.parse_args()
-    scrapper(args.search)
+    product = scrapper(args.search)
+    print(product)
